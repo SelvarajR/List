@@ -14,10 +14,11 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        navigationItem.title = "List"
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ListCell")
+        tableView.register(ListCell.self, forCellReuseIdentifier: "ListCell")
         view.addSubview(tableView)
         
     }
@@ -32,10 +33,10 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier:
-                                                                    "ListCell", for: indexPath)
-        cell.textLabel?.text = "Test Title"
-        
+        let cell: ListCell = tableView.dequeueReusableCell(withIdentifier:
+                                                            "ListCell", for: indexPath) as! ListCell
+        cell.title.text = "Test Title"
+        cell.descriptionText.text = "Test description here.."
         return cell
     }
     
