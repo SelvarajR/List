@@ -34,7 +34,8 @@ struct DataMapping: Mappable {
 
     var title: String?
     var description: String?
-
+    var image: String?
+    
     init(map: Mapper) throws {
         do {
             title = try map.from("title")
@@ -46,6 +47,12 @@ struct DataMapping: Mappable {
             description = try map.from("description")
         } catch {
             description = ""
+        }
+        
+        do {
+            image = try map.from("imageHref")
+        } catch {
+            image = ""
         }
     }
 }

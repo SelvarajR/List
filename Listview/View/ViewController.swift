@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class ViewController: UIViewController {
     
@@ -22,7 +23,7 @@ class ViewController: UIViewController {
     }
     
     func initView() {
-        navigationItem.title = "List"
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(ListCell.self, forCellReuseIdentifier: "ListCell")
@@ -40,7 +41,7 @@ extension ViewController: ModelDelegate {
 
     /* Service call ends and populating the data on TableView  */
     func didReceiveData(callback: String) {
-        
+        navigationItem.title = viewModel.tableTitle
         tableView.reloadData()
     }
 }
@@ -48,7 +49,7 @@ extension ViewController: ModelDelegate {
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 150
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -57,14 +58,12 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell: ListCell = tableView.dequeueReusableCell(withIdentifier:
-                                                                    "ListCell", for: indexPath) as? ListCell else {
-            fatalError("Cell does not exists")
-        }
-        
+        let cell: ListCell = tableView.dequeueReusableCell(withIdentifier:
+                                                            "ListCell", for: indexPath) as! ListCell
         let row = viewModel.tableRows[indexPath.row]
         cell.title.text = row.title
         cell.descriptionText.text = row.description
+        cell.avatar.kf.setImage(with: URL(string: row.image!), placeholder: UIImage(named: "Placeholder"))
         return cell
     }
     
