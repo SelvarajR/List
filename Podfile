@@ -8,4 +8,6 @@ target 'Listview' do
   # Pods for Listview
   pod 'Alamofire', '~> 5.4'
   pod "ModelMapper"
+  pod 'SnapKit'
+  pod 'Kingfisher', '~> 7.0'
 end
