@@ -64,9 +64,9 @@ class ListCell: UITableViewCell {
 
     var cellViewModel: ListCellViewModel? {
         didSet {
-            title.text = cellViewModel?.cell_title
-            descriptionText.text = cellViewModel?.cell_desc
-            avatar.kf.setImage(with: URL(string: cellViewModel?.cell_imag ?? ""), placeholder: UIImage(named: constant.placeHolderImage))
+            title.text = cellViewModel?.cellTitle
+            descriptionText.text = cellViewModel?.cellDesc
+            avatar.kf.setImage(with: URL(string: cellViewModel?.cellImag ?? ""), placeholder: UIImage(named: constant.placeHolderImage))
         }
     }
     
