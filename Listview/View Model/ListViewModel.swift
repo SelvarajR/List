@@ -46,9 +46,9 @@ class ListViewModel: NSObject {
         
     func createCellModel(list: DataMapping) -> ListCellViewModel {
         return ListCellViewModel(
-            cell_title: list.title ?? "",
-            cell_desc: list.description ?? "",
-            cell_imag: list.image ?? ""
+            cellTitle: list.title ?? "",
+            cellDesc: list.description ?? "",
+            cellImag: list.image ?? ""
         )
         }
     
@@ -78,7 +78,7 @@ class ListViewModel: NSObject {
 }
     
 struct ListCellViewModel {
-    var cell_title: String
-    var cell_desc: String
-    var cell_imag: String
+    var cellTitle: String
+    var cellDesc: String
+    var cellImag: String
 }
