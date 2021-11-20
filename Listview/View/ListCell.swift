@@ -13,6 +13,8 @@ class ListCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        let myFont: UIFont = UIFont.init(name: constant.fontName, size: 13)!
+        
         /* Initializing Cell elements */
         avatar = UIImageView.init()
         avatar.layer.borderWidth = 1
@@ -20,10 +22,16 @@ class ListCell: UITableViewCell {
         contentView.addSubview(avatar)
         
         title = UILabel.init()
+        title.font = myFont
         contentView.addSubview(title)
         
         descriptionText = UILabel.init()
+        descriptionText.font = myFont
         descriptionText.textColor = .gray
+        descriptionText.lineBreakMode = .byWordWrapping
+        descriptionText.sizeToFit()
+        descriptionText.numberOfLines = 0
+        descriptionText.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(descriptionText)
         
         self.setConstrains()
@@ -46,6 +54,7 @@ class ListCell: UITableViewCell {
             make.top.equalTo(title.snp.bottom).offset(10)
             make.left.equalTo(avatar.snp.right).offset(10)
             make.right.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-10)
                     })
     }
     
@@ -56,5 +65,5 @@ class ListCell: UITableViewCell {
     var title: UILabel!
     var descriptionText: UILabel!
     var avatar: UIImageView!
-    
+    private let constant = Constants()
 }

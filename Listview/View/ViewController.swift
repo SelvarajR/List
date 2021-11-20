@@ -7,10 +7,12 @@
 
 import UIKit
 import Kingfisher
+import SnapKit
 
 class ViewController: UIViewController {
     
     private let tableView = UITableView.init(frame: UIScreen.main.bounds)
+    private let refresher = UIRefreshControl()
     private let constant = Constants()
     lazy var viewModel = {
             ListViewModel()
@@ -26,8 +28,16 @@ class ViewController: UIViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(ListCell.self, forCellReuseIdentifier: "ListCell")
+        tableView.register(ListCell.self, forCellReuseIdentifier: constant.cellIdentifer)
         view.addSubview(tableView)
+        
+        tableView.snp.makeConstraints({ (make) in
+            make.edges.equalToSuperview()
+        })
+        
+        refresher.attributedTitle = NSAttributedString(string: constant.refresher)
+        refresher.addTarget(self, action: #selector(reloadData(sender:)), for: .valueChanged)
+        tableView.addSubview(refresher)
     }
     
     func initViewModel() {
@@ -42,14 +52,20 @@ extension ViewController: ModelDelegate {
     /* Service call ends and populating the data on TableView  */
     func didReceiveData(callback: String) {
         navigationItem.title = viewModel.tableTitle
+        refresher.endRefreshing()
         tableView.reloadData()
+    }
+    
+    /* Fetching data over the network upon pull down the Table */
+    @objc func reloadData(sender: AnyObject) {
+        viewModel.getLists()
     }
 }
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 150
+            return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -59,11 +75,11 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell: ListCell = tableView.dequeueReusableCell(withIdentifier:
-                                                            "ListCell", for: indexPath) as! ListCell
+                                                            constant.cellIdentifer, for: indexPath) as! ListCell
         let row = viewModel.tableRows[indexPath.row]
         cell.title.text = row.title
         cell.descriptionText.text = row.description
-        cell.avatar.kf.setImage(with: URL(string: row.image!), placeholder: UIImage(named: "Placeholder"))
+        cell.avatar.kf.setImage(with: URL(string: row.image ?? ""), placeholder: UIImage(named: constant.placeHolderImage))
         return cell
     }
     

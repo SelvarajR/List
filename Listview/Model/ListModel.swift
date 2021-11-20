@@ -17,6 +17,7 @@ struct ListModel: Mappable {
     var demoTableRows = [DataMapping]()
 
     init(map: Mapper) throws {
+        
         try demoTitle = map.from("title")
         try demoItems = map.from("rows")
 
@@ -32,27 +33,14 @@ struct ListModel: Mappable {
 /* DataMapping to parse the table rows from JSON */
 struct DataMapping: Mappable {
 
-    var title: String?
-    var description: String?
-    var image: String?
-    
-    init(map: Mapper) throws {
-        do {
-            title = try map.from("title")
-        } catch {
-            title = ""
-        }
+    var title: String? = ""
+    var description: String? = ""
+    var image: String? = ""
 
-        do {
-            description = try map.from("description")
-        } catch {
-            description = ""
-        }
+    init(map: Mapper) throws {
         
-        do {
-            image = try map.from("imageHref")
-        } catch {
-            image = ""
-        }
+        title = try? map.from("title")
+        description = try? map.from("description")
+        image = try? map.from("imageHref")
     }
 }
