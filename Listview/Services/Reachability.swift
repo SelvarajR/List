@@ -8,7 +8,7 @@
 import Alamofire
 
 struct Reachability {
-
+    /* Check the internet connection availability */
     var isInternetAvailable:Bool {
         return NetworkReachabilityManager()!.isReachable
     }

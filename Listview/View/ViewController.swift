@@ -16,6 +16,7 @@ class ViewController: UIViewController {
         self.initViewModel()
     }
     
+    /* initialize the View UI elements */
     func initView() {
         
         tableView.delegate = self
@@ -32,6 +33,7 @@ class ViewController: UIViewController {
         tableView.addSubview(refresher)
     }
     
+    /* initialize the request to fetch data */
     @objc func initViewModel() {
         
         viewModel.getLists()
@@ -51,7 +53,7 @@ class ViewController: UIViewController {
             ListViewModel()
         }()
 }
-
+/* Table delegate and data sources declarations */
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

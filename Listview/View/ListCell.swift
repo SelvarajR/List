@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import Kingfisher
 
+/* table cell UI elements declarations */
 class ListCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -36,6 +37,7 @@ class ListCell: UITableViewCell {
         self.setConstrains()
     }
     
+    /* Constrains to UI elements from SnapKit lib */
     func setConstrains() {
         avatar.snp.makeConstraints({ (make) in
             make.size.equalTo(CGSize(width: 100, height: 100))
@@ -62,6 +64,7 @@ class ListCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    /* Download and cache the images using Kingfisher lib */
     var cellViewModel: ListCellViewModel? {
         didSet {
             title.text = cellViewModel?.cellTitle

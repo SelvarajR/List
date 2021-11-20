@@ -15,11 +15,12 @@ class ListViewModel: NSObject {
         self.listService = listService
     }
 
+    /* GetLists API request begins */
     func getLists() {
         if Reachability().isInternetAvailable {
             listService.getLists { success, data, error in
                 if success, let detailsDict = data as? NSDictionary {
-                                    
+                    /* receive API response as Dictionalry*/
                     self.setData(data: detailsDict)
 
                 } else {
@@ -59,11 +60,14 @@ class ListViewModel: NSObject {
     /* Show Alert: when no internet or any error while fetching the data */
     func showAlert(_ message: String) {
         
+        let scenes = UIApplication.shared.connectedScenes
+        let windowScene = scenes.first as? UIWindowScene
+        let window = windowScene?.windows.first
+        
         let alert = UIAlertController(title: constant.title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: constant.ok, style: .default, handler: { _ in
                         }))
-        let rootViewController = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
-        rootViewController?.rootViewController?.present(alert, animated: true, completion: nil)
+        window?.rootViewController?.present(alert, animated: true, completion: nil)
     }
 
     private let constant = Constants()
