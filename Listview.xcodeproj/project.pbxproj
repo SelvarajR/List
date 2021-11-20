@@ -19,6 +19,7 @@
 		5E810FE32747B17C0071D776 /* ListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E810FE22747B17C0071D776 /* ListService.swift */; };
 		5E810FE52747B4C30071D776 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E810FE42747B4C30071D776 /* ListViewModel.swift */; };
 		5E810FE72748012F0071D776 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E810FE62748012F0071D776 /* Constants.swift */; };
+		5E810FE92748C7610071D776 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E810FE82748C7610071D776 /* Reachability.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		5E810FE22747B17C0071D776 /* ListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListService.swift; sourceTree = "<group>"; };
 		5E810FE42747B4C30071D776 /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
 		5E810FE62748012F0071D776 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		5E810FE82748C7610071D776 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		7317C39FBB657F14CA290077 /* Pods-Listview.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Listview.release.xcconfig"; path = "Target Support Files/Pods-Listview/Pods-Listview.release.xcconfig"; sourceTree = "<group>"; };
 		A41D5382D818792CBDAF92B1 /* Pods_Listview.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Listview.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -176,6 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				5E810FE22747B17C0071D776 /* ListService.swift */,
+				5E810FE82748C7610071D776 /* Reachability.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -368,6 +371,7 @@
 				5E810FE32747B17C0071D776 /* ListService.swift in Sources */,
 				5E810FE72748012F0071D776 /* Constants.swift in Sources */,
 				5E810FAF274637F20071D776 /* ViewController.swift in Sources */,
+				5E810FE92748C7610071D776 /* Reachability.swift in Sources */,
 				5E810FAB274637F20071D776 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

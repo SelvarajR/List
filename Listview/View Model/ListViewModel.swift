@@ -9,7 +9,7 @@ import Foundation
 
 /* Dalegate method to return the data to callback */
 protocol ModelDelegate: AnyObject {
-    func didReceiveData(callback: String)
+    func didReceiveData(response: HTTPResponse)
 }
 
 class ListViewModel: NSObject {
@@ -20,15 +20,20 @@ class ListViewModel: NSObject {
     }
 
     func getLists() {
-        listService.getLists { success, data, error in
-            if success, let detailsDict = data as? NSDictionary {
-                                
-                self.setData(data: detailsDict)
+        if Reachability().isInternetAvailable {
+            listService.getLists { success, data, error in
+                if success, let detailsDict = data as? NSDictionary {
+                                    
+                    self.setData(data: detailsDict)
 
-            } else {
-                print("Error")
+                } else {
+                    self.delegate?.didReceiveData(response: .error) /* Callback */
+                }
             }
+        } else {
+            self.delegate?.didReceiveData(response: .noInternet) /* Callback */
         }
+        
     }
     
     /* Data setup from the received data */
@@ -36,7 +41,7 @@ class ListViewModel: NSObject {
         let demo = ListModel.from(data as NSDictionary)
         tableTitle = demo?.demoTitle ?? ""
         tableRows = demo?.demoTableRows ?? []
-        self.delegate?.didReceiveData(callback: "success") /* Callback */
+        self.delegate?.didReceiveData(response: .success) /* Callback */
     }
         
     var tableTitle: String?
