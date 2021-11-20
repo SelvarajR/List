@@ -204,6 +204,7 @@
 				5E810FA4274637F20071D776 /* Frameworks */,
 				5E810FA5274637F20071D776 /* Resources */,
 				01DC0AF10540F0476A222042 /* [CP] Embed Pods Frameworks */,
+				5E810FEC274942930071D776 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -335,6 +336,23 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Listview/Pods-Listview-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		5E810FEC274942930071D776 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n# Relative path from the .xcodeproj which contains this script\nswiftlint lint –config swiftlint.yml\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		7A2FD340A191E3ABB81F7067 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
