@@ -19,6 +19,7 @@ struct Constants {
     let fontName = "helvetica neue"
     
     let ok = "Ok"
-    let error = "Error"
+    let title = "Hello!"
+    let error = "Error in getting the data"
     let noInternet = "No Internet"
 }
