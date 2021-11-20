@@ -15,7 +15,7 @@ protocol ListServiceProtocol {
 class ListService: ListServiceProtocol {
     
     func getLists(completion: @escaping (Bool, Any, String?) -> ()) {
-        
+        /* API service calls through Alamofire lib */
         AF.request(constant.url, method: .get, encoding: JSONEncoding.default).response { response in
             debugPrint(response)
             let responseStrInISOLatin = String(data: response.data ?? Data(), encoding: String.Encoding.isoLatin1)
