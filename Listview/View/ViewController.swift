@@ -11,13 +11,6 @@ import SnapKit
 
 class ViewController: UIViewController {
     
-    private let tableView = UITableView.init(frame: UIScreen.main.bounds)
-    private let refresher = UIRefreshControl()
-    private let constant = Constants()
-    lazy var viewModel = {
-            ListViewModel()
-        }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initView()
@@ -44,20 +37,44 @@ class ViewController: UIViewController {
         viewModel.delegate = self as ModelDelegate
         viewModel.getLists()
     }
-
+    
+    private let tableView = UITableView.init(frame: UIScreen.main.bounds)
+    private let refresher = UIRefreshControl()
+    private let constant = Constants()
+    lazy var viewModel = {
+            ListViewModel()
+        }()
 }
 
 extension ViewController: ModelDelegate {
 
     /* Service call ends and populating the data on TableView  */
-    func didReceiveData(callback: String) {
-        navigationItem.title = viewModel.tableTitle
+    func didReceiveData(response: HTTPResponse) {
         refresher.endRefreshing()
-        tableView.reloadData()
+        
+        switch response {
+            case .success:
+                navigationItem.title = viewModel.tableTitle
+                tableView.reloadData()
+            case .error:
+                showAlert(constant.error)
+            case .noInternet:
+                showAlert(constant.noInternet)
+        }
+        
+    }
+    
+    func showAlert(_ message: String) {
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: constant.ok, style: .default, handler: { _ in
+                }))
+        self.present(alert, animated: true, completion: nil)
     }
     
     /* Fetching data over the network upon pull down the Table */
     @objc func reloadData(sender: AnyObject) {
+        
         viewModel.getLists()
     }
 }
