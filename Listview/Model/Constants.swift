@@ -9,5 +9,9 @@ import Foundation
 
 struct Constants {
     /* Localizable constants declaration */
-    let demoUrl = "https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl/facts.json"
+    let url = "https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl/facts.json"
+    let refresher = "Pull to refresh.."
+    let cellIdentifer = "ListCell"
+    let placeHolderImage = "Placeholder"
+    let fontName = "helvetica neue"
 }

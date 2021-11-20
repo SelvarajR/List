@@ -13,10 +13,11 @@ protocol ListServiceProtocol {
 }
 
 class ListService: ListServiceProtocol {
+    
     func getLists(completion: @escaping (Bool, Any, String?) -> ()) {
         
-        AF.request("https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl/facts.json", method: .get, encoding: JSONEncoding.default).response { response in
-            
+        AF.request(constant.url, method: .get, encoding: JSONEncoding.default).response { response in
+            debugPrint(response)
             let responseStrInISOLatin = String(data: response.data ?? Data(), encoding: String.Encoding.isoLatin1)
             guard let modifiedDataInUTF8Format = responseStrInISOLatin?.data(using: String.Encoding.utf8) else {
                 return
@@ -30,4 +31,6 @@ class ListService: ListServiceProtocol {
             }
         }
     }
+    
+    private let constant = Constants()
 }
