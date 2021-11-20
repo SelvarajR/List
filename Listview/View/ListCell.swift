@@ -6,58 +6,73 @@
 //
 
 import UIKit
+import SnapKit
+import Kingfisher
 
 class ListCell: UITableViewCell {
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        let marginGuide = contentView.layoutMarginsGuide
+        let myFont: UIFont = UIFont.init(name: constant.fontName, size: 15)!
         
         /* Initializing Cell elements */
+        avatar = UIImageView.init()
+        contentView.addSubview(avatar)
+        
         title = UILabel.init()
-        title.textColor = .blue
+        title.font = myFont
         contentView.addSubview(title)
         
         descriptionText = UILabel.init()
+        descriptionText.font = myFont
         descriptionText.textColor = .gray
+        descriptionText.lineBreakMode = .byWordWrapping
+        descriptionText.sizeToFit()
+        descriptionText.numberOfLines = 0
+        descriptionText.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(descriptionText)
         
-        title.translatesAutoresizingMaskIntoConstraints = false
-        title.topAnchor.constraint(equalTo: marginGuide.topAnchor, constant: 1).isActive = true
-        title.leadingAnchor.constraint(equalTo: marginGuide.leadingAnchor).isActive = true
-        title.trailingAnchor.constraint(equalTo: marginGuide.trailingAnchor).isActive = true
-        title.numberOfLines = 1
+        self.setConstrains()
+    }
+    
+    func setConstrains() {
+        avatar.snp.makeConstraints({ (make) in
+            make.size.equalTo(CGSize(width: 100, height: 100))
+            make.top.equalToSuperview().offset(10)
+            make.left.equalToSuperview().offset(10)
+            make.bottom.lessThanOrEqualToSuperview().offset(-10)
+        })
         
-        descriptionText.translatesAutoresizingMaskIntoConstraints = false
-        descriptionText.topAnchor.constraint(equalTo: title.topAnchor, constant: 20).isActive = true
-        descriptionText.leadingAnchor.constraint(equalTo: marginGuide.leadingAnchor).isActive = true
-        descriptionText.trailingAnchor.constraint(equalTo: marginGuide.trailingAnchor).isActive = true
-        descriptionText.numberOfLines = 2
-        
-        
-        contentView.addConstraints(title.constraints)
-        
-        contentView.addConstraints(descriptionText.constraints)
-        
+        title.snp.makeConstraints({ (make) in
+            make.top.equalTo(avatar.snp.top)
+            make.left.equalTo(avatar.snp.right).offset(10)
+            make.right.equalToSuperview().offset(-10)
+                    })
+
+        descriptionText.snp.makeConstraints({ (make) in
+            make.top.equalTo(title.snp.bottom).offset(10)
+            make.left.equalTo(avatar.snp.right).offset(10)
+            make.right.equalToSuperview().offset(-10)
+            make.bottom.lessThanOrEqualToSuperview().offset(-10)
+                    })
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    var cellViewModel: ListCellViewModel? {
+        didSet {
+            title.text = cellViewModel?.cellTitle
+            descriptionText.text = cellViewModel?.cellDesc
+            avatar.kf.setImage(with: URL(string: cellViewModel?.cellImag ?? ""), placeholder: UIImage(named: constant.placeHolderImage))
+        }
+    }
     
+    private let constant = Constants()
     var title: UILabel!
     var descriptionText: UILabel!
+    var avatar: UIImageView!
     
 }

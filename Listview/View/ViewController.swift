@@ -6,38 +6,71 @@
 //
 
 import UIKit
+import SnapKit
 
 class ViewController: UIViewController {
-
-    private let tableView = UITableView.init(frame: UIScreen.main.bounds)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        navigationItem.title = "List"
+        self.initView()
+        self.initViewModel()
+    }
+    
+    func initView() {
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(ListCell.self, forCellReuseIdentifier: "ListCell")
+        tableView.register(ListCell.self, forCellReuseIdentifier: constant.cellIdentifer)
         view.addSubview(tableView)
         
+        tableView.snp.makeConstraints({ (make) in
+            make.edges.equalToSuperview()
+        })
+        
+        refresher.attributedTitle = NSAttributedString(string: constant.refresher)
+        refresher.addTarget(self, action: #selector(initViewModel), for: .valueChanged)
+        tableView.addSubview(refresher)
     }
-
+    
+    @objc func initViewModel() {
+        
+        viewModel.getLists()
+        viewModel.reloadTableView = { [weak self] in
+                    DispatchQueue.main.async {
+                        self?.navigationItem.title = self?.viewModel.tableTitle
+                        self?.refresher.endRefreshing()
+                        self?.tableView.reloadData()
+                    }
+                }
+    }
+    
+    private let tableView = UITableView.init(frame: UIScreen.main.bounds)
+    private let refresher = UIRefreshControl()
+    private let constant = Constants()
+    lazy var viewModel = {
+            ListViewModel()
+        }()
 }
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+            return UITableView.automaticDimension
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        5
+        return viewModel.tableRows.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell: ListCell = tableView.dequeueReusableCell(withIdentifier:
-                                                            "ListCell", for: indexPath) as! ListCell
-        cell.title.text = "Test Title"
-        cell.descriptionText.text = "Test description here.."
+                                                            constant.cellIdentifer, for: indexPath) as! ListCell
+        cell.cellViewModel = viewModel.getCellViewModel(at: indexPath)
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Did select \(indexPath.row)")
+    }
 }
