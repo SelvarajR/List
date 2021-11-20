@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Kingfisher
 import SnapKit
 
 class ViewController: UIViewController {
@@ -29,13 +28,20 @@ class ViewController: UIViewController {
         })
         
         refresher.attributedTitle = NSAttributedString(string: constant.refresher)
-        refresher.addTarget(self, action: #selector(reloadData(sender:)), for: .valueChanged)
+        refresher.addTarget(self, action: #selector(initViewModel), for: .valueChanged)
         tableView.addSubview(refresher)
     }
     
-    func initViewModel() {
-        viewModel.delegate = self as ModelDelegate
+    @objc func initViewModel() {
+        
         viewModel.getLists()
+        viewModel.reloadTableView = { [weak self] in
+                    DispatchQueue.main.async {
+                        self?.navigationItem.title = self?.viewModel.tableTitle
+                        self?.refresher.endRefreshing()
+                        self?.tableView.reloadData()
+                    }
+                }
     }
     
     private let tableView = UITableView.init(frame: UIScreen.main.bounds)
@@ -44,39 +50,6 @@ class ViewController: UIViewController {
     lazy var viewModel = {
             ListViewModel()
         }()
-}
-
-extension ViewController: ModelDelegate {
-
-    /* Service call ends and populating the data on TableView  */
-    func didReceiveData(response: HTTPResponse) {
-        refresher.endRefreshing()
-        
-        switch response {
-            case .success:
-                navigationItem.title = viewModel.tableTitle
-                tableView.reloadData()
-            case .error:
-                showAlert(constant.error)
-            case .noInternet:
-                showAlert(constant.noInternet)
-        }
-        
-    }
-    
-    func showAlert(_ message: String) {
-        
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: constant.ok, style: .default, handler: { _ in
-                }))
-        self.present(alert, animated: true, completion: nil)
-    }
-    
-    /* Fetching data over the network upon pull down the Table */
-    @objc func reloadData(sender: AnyObject) {
-        
-        viewModel.getLists()
-    }
 }
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
@@ -93,10 +66,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         
         let cell: ListCell = tableView.dequeueReusableCell(withIdentifier:
                                                             constant.cellIdentifer, for: indexPath) as! ListCell
-        let row = viewModel.tableRows[indexPath.row]
-        cell.title.text = row.title
-        cell.descriptionText.text = row.description
-        cell.avatar.kf.setImage(with: URL(string: row.image ?? ""), placeholder: UIImage(named: constant.placeHolderImage))
+        cell.cellViewModel = viewModel.getCellViewModel(at: indexPath)
         return cell
     }
     

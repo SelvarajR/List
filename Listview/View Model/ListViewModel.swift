@@ -6,11 +6,7 @@
 //
 
 import Foundation
-
-/* Dalegate method to return the data to callback */
-protocol ModelDelegate: AnyObject {
-    func didReceiveData(response: HTTPResponse)
-}
+import UIKit
 
 class ListViewModel: NSObject {
     private var listService: ListServiceProtocol
@@ -27,13 +23,12 @@ class ListViewModel: NSObject {
                     self.setData(data: detailsDict)
 
                 } else {
-                    self.delegate?.didReceiveData(response: .error) /* Callback */
+                    self.showAlert(self.constant.error)
                 }
             }
         } else {
-            self.delegate?.didReceiveData(response: .noInternet) /* Callback */
+            self.showAlert(constant.noInternet)
         }
-        
     }
     
     /* Data setup from the received data */
@@ -41,12 +36,49 @@ class ListViewModel: NSObject {
         let demo = ListModel.from(data as NSDictionary)
         tableTitle = demo?.demoTitle ?? ""
         tableRows = demo?.demoTableRows ?? []
-        self.delegate?.didReceiveData(response: .success) /* Callback */
+        
+        var vms = [ListCellViewModel]()
+                for row in tableRows {
+                    vms.append(createCellModel(list: row))
+                }
+                listCellViewModels = vms
     }
         
+    func createCellModel(list: DataMapping) -> ListCellViewModel {
+        return ListCellViewModel(
+            cell_title: list.title ?? "",
+            cell_desc: list.description ?? "",
+            cell_imag: list.image ?? ""
+        )
+        }
+    
+    func getCellViewModel(at indexPath: IndexPath) -> ListCellViewModel {
+            return listCellViewModels[indexPath.row]
+        }
+    
+    /* Show Alert: when no internet or any error while fetching the data */
+    func showAlert(_ message: String) {
+        
+        let alert = UIAlertController(title: constant.title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: constant.ok, style: .default, handler: { _ in
+                        }))
+        let rootViewController = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+        rootViewController?.rootViewController?.present(alert, animated: true, completion: nil)
+    }
+
+    private let constant = Constants()
     var tableTitle: String?
     var tableRows = [DataMapping]()
-    private let constant = Constants()
-    weak var delegate: ModelDelegate?
+    var reloadTableView: (() -> Void)?
+    var listCellViewModels = [ListCellViewModel]() {
+            didSet {
+                reloadTableView?()
+            }
+        }
 }
     
+struct ListCellViewModel {
+    var cell_title: String
+    var cell_desc: String
+    var cell_imag: String
+}

@@ -7,12 +7,6 @@
 
 import Alamofire
 
-enum HTTPResponse {
-    case success
-    case error
-    case noInternet
-}
-
 struct Reachability {
 
     var isInternetAvailable:Bool {

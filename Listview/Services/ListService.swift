@@ -27,7 +27,7 @@ class ListService: ListServiceProtocol {
                 
                 completion(true, parsedData, nil)
             } catch {
-                completion(false, [], "Error: Trying to parse Employees to model")
+                completion(false, [], "Error: Trying to parse List to model")
             }
         }
     }
