@@ -17,10 +17,9 @@ struct ListModel: Mappable {
     var demoTableRows = [DataMapping]()
 
     init(map: Mapper) throws {
-        
         try demoTitle = map.from("title")
         try demoItems = map.from("rows")
-
+        
         let demoArray = demoItems ?? []
         for row in demoArray {
             if let row = DataMapping.from((row as? NSDictionary)!) {
@@ -38,7 +37,6 @@ struct DataMapping: Mappable {
     var image: String? = ""
 
     init(map: Mapper) throws {
-        
         title = try? map.from("title")
         description = try? map.from("description")
         image = try? map.from("imageHref")

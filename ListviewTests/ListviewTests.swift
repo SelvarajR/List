@@ -13,6 +13,7 @@ class ListviewTests: XCTestCase {
     let myArrayOfDict = NSMutableArray()
     var myDictionary = NSMutableDictionary()
     var datasource = ListViewModel()
+    var service = ListService()
     var constant = Constants()
     let tableView = UITableView()
     var viewcontrollertest: ViewController!
@@ -27,12 +28,12 @@ class ListviewTests: XCTestCase {
         tableView.delegate = viewcontrollertest.self
         tableView.dataSource = viewcontrollertest.self
         tableView.register(ListCell.self, forCellReuseIdentifier: constant.cellIdentifer)
+        
         for index in 1...5 {
-
             let item: NSDictionary = [
-                "title": "new title"+" \(index)",
-                "description": "new description"+" \(index)",
-                "imageHref": "new imageHref"+" \(index)"
+                "title": "new title \(index)",
+                "description": "new description \(index)",
+                "imageHref": "new imageHref \(index)"
             ]
 
             myArrayOfDict.add(item)
@@ -51,13 +52,6 @@ class ListviewTests: XCTestCase {
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         self.datasource.setData(data: self.myDictionary)
         XCTAssertTrue(true)
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
     }
     
     func testHasATableView() {
@@ -82,21 +76,31 @@ class ListviewTests: XCTestCase {
 
     func testTableViewConfromsToTableViewDelegateProtocol() {
         XCTAssertTrue(self.viewcontrollertest.conforms(to: UITableViewDelegate.self))
-        XCTAssertTrue(self.viewcontrollertest.responds(to:
-            #selector(self.viewcontrollertest.tableView(_:didSelectRowAt:))))
-    }
-
+        }
+    
     func testTableViewConformsToTableViewDataSourceProtocol() {
         XCTAssertTrue(self.viewcontrollertest.conforms(to: UITableViewDataSource.self))
-        XCTAssertTrue(self.viewcontrollertest.responds(to:
-            #selector(self.viewcontrollertest.tableView(_:numberOfRowsInSection:))))
-        XCTAssertTrue(self.viewcontrollertest.responds(to:
-            #selector(self.viewcontrollertest.tableView(_:cellForRowAt:))))
+        XCTAssertTrue(
+            self.viewcontrollertest.responds(
+                to: #selector(self.viewcontrollertest.tableView(_:numberOfRowsInSection:))
+            )
+        )
+        XCTAssertTrue(
+            self.viewcontrollertest.responds(
+            to: #selector(self.viewcontrollertest.tableView(_:cellForRowAt:))
+            )
+        )
+        XCTAssertTrue(
+            self.viewcontrollertest.responds(
+            to: #selector(self.viewcontrollertest.tableView(_:heightForRowAt:))
+            )
+        )
     }
 
     func testTableViewCellHasReuseIdentifier() {
-        let cell = self.tableView.dequeueReusableCell(withIdentifier: constant.cellIdentifer,
-                                                      for: IndexPath(row: 0, section: 0))
+        let cell = self.tableView.dequeueReusableCell(
+            withIdentifier: constant.cellIdentifer, for: IndexPath(row: 0, section: 0)
+        )
         let actualReuseIdentifer = cell.reuseIdentifier
         let expectedReuseIdentifier = constant.cellIdentifer
         XCTAssertEqual(actualReuseIdentifer, expectedReuseIdentifier)
@@ -104,13 +108,11 @@ class ListviewTests: XCTestCase {
 
     func testTableCellHasCorrectLabelText() {
 
-        guard let cell0 = self.tableView.dequeueReusableCell(withIdentifier:
-            constant.cellIdentifer, for: IndexPath(row: 0, section: 0)) as? ListCell else {
+        guard let cell0 = self.tableView.dequeueReusableCell(withIdentifier: constant.cellIdentifer, for: IndexPath(row: 0, section: 0)) as? ListCell else {
                 fatalError(constant.error)
         }
-        XCTAssertEqual(cell0.title.text, nil)
-        XCTAssertEqual(cell0.descriptionText.text, nil)
-        XCTAssertEqual(cell0.avatar.image, nil)
+        XCTAssertNil(cell0.title.text)
+        XCTAssertNil(cell0.descriptionText.text)
+        XCTAssertNil(cell0.avatar.image)
     }
-
 }
