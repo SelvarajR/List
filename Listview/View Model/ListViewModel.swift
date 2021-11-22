@@ -9,8 +9,7 @@ import Foundation
 import UIKit
 
 class ListViewModel: NSObject {
-    private var listService: ListServiceProtocol
-
+    
     init(listService: ListServiceProtocol = ListService()) {
         self.listService = listService
     }
@@ -22,65 +21,75 @@ class ListViewModel: NSObject {
                 if success, let detailsDict = data as? NSDictionary {
                     /* receive API response as Dictionalry*/
                     self.setData(data: detailsDict)
-
-                } else {
+                }
+                else {
                     self.showAlert(self.constant.error)
                 }
             }
-        } else {
+        }
+        else {
             self.showAlert(constant.noInternet)
         }
     }
+    
+    /* cell view model data bindings */
+    func getCellViewModel(at indexPath: IndexPath) -> ListCellViewModel {
+        listCellViewModels[indexPath.row]
+    }
+    
+    private let constant = Constants()
+    private var listService: ListServiceProtocol
+    var listCellViewModels = [ListCellViewModel]() {
+        didSet {
+            reloadTableView?()
+        }
+    }
+    var tableTitle: String?
+    var tableRows = [DataMapping]()
+    var reloadTableView: (() -> Void)?
+}
+    
+extension ListViewModel {
     
     /* Data setup from the received data */
     func setData(data: NSDictionary) {
         let demo = ListModel.from(data as NSDictionary)
         tableTitle = demo?.demoTitle ?? ""
         tableRows = demo?.demoTableRows ?? []
-        
-        var vms = [ListCellViewModel]()
-                for row in tableRows {
-                    vms.append(createCellModel(list: row))
-                }
-                listCellViewModels = vms
+        appendData(rows: tableRows)
     }
-        
+    
+    func appendData(rows: [DataMapping]) {
+        var vms = [ListCellViewModel]()
+        for row in tableRows {
+            if row.title != nil || row.description != nil || row.image != nil {
+                vms.append(createCellModel(list: row))
+            }
+        }
+        listCellViewModels = vms
+    }
+    
     func createCellModel(list: DataMapping) -> ListCellViewModel {
-        return ListCellViewModel(
+        ListCellViewModel(
             cellTitle: list.title ?? "",
             cellDesc: list.description ?? "",
             cellImag: list.image ?? ""
         )
-        }
-    
-    func getCellViewModel(at indexPath: IndexPath) -> ListCellViewModel {
-            return listCellViewModels[indexPath.row]
-        }
+    }
     
     /* Show Alert: when no internet or any error while fetching the data */
     func showAlert(_ message: String) {
-        
         let scenes = UIApplication.shared.connectedScenes
         let windowScene = scenes.first as? UIWindowScene
         let window = windowScene?.windows.first
-        
         let alert = UIAlertController(title: constant.title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: constant.ok, style: .default, handler: { _ in
-                        }))
+                        })
+        )
         window?.rootViewController?.present(alert, animated: true, completion: nil)
     }
-
-    private let constant = Constants()
-    var tableTitle: String?
-    var tableRows = [DataMapping]()
-    var reloadTableView: (() -> Void)?
-    var listCellViewModels = [ListCellViewModel]() {
-            didSet {
-                reloadTableView?()
-            }
-        }
 }
-    
+
 struct ListCellViewModel {
     var cellTitle: String
     var cellDesc: String

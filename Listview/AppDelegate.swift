@@ -10,11 +10,9 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
     var newWindow: UIWindow? = UIWindow(frame: UIScreen.main.bounds)
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
         /* Assigning ViewController to the the app Window */
         if let window = newWindow {
             window.backgroundColor = .white
@@ -23,6 +21,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         return true
     }
-
 }
-
