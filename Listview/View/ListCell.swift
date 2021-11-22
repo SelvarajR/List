@@ -15,18 +15,18 @@ class ListCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        let myFont: UIFont = UIFont.init(name: constant.fontName, size: 15)!
+        let fontHelvetica = UIFont(name: constant.fontName, size: 15)!
         
         /* Initializing Cell elements */
-        avatar = UIImageView.init()
+        avatar = UIImageView()
         contentView.addSubview(avatar)
         
-        title = UILabel.init()
-        title.font = myFont
+        title = UILabel()
+        title.font = fontHelvetica
         contentView.addSubview(title)
         
-        descriptionText = UILabel.init()
-        descriptionText.font = myFont
+        descriptionText = UILabel()
+        descriptionText.font = fontHelvetica
         descriptionText.textColor = .gray
         descriptionText.lineBreakMode = .byWordWrapping
         descriptionText.sizeToFit()
@@ -35,29 +35,6 @@ class ListCell: UITableViewCell {
         contentView.addSubview(descriptionText)
         
         self.setConstrains()
-    }
-    
-    /* Constrains to UI elements from SnapKit lib */
-    func setConstrains() {
-        avatar.snp.makeConstraints({ (make) in
-            make.size.equalTo(CGSize(width: 100, height: 100))
-            make.top.equalToSuperview().offset(10)
-            make.left.equalToSuperview().offset(10)
-            make.bottom.lessThanOrEqualToSuperview().offset(-10)
-        })
-        
-        title.snp.makeConstraints({ (make) in
-            make.top.equalTo(avatar.snp.top)
-            make.left.equalTo(avatar.snp.right).offset(10)
-            make.right.equalToSuperview().offset(-10)
-                    })
-
-        descriptionText.snp.makeConstraints({ (make) in
-            make.top.equalTo(title.snp.bottom).offset(10)
-            make.left.equalTo(avatar.snp.right).offset(10)
-            make.right.equalToSuperview().offset(-10)
-            make.bottom.lessThanOrEqualToSuperview().offset(-10)
-                    })
     }
     
     required init?(coder: NSCoder) {
@@ -77,5 +54,28 @@ class ListCell: UITableViewCell {
     var title: UILabel!
     var descriptionText: UILabel!
     var avatar: UIImageView!
+}
+
+extension ListCell {
     
+    /* Constrains to UI elements from SnapKit lib */
+    func setConstrains() {
+        avatar.snp.makeConstraints({ make in
+            make.size.equalTo(CGSize(width: 100, height: 100))
+            make.top.equalToSuperview().offset(10)
+            make.left.equalToSuperview().offset(10)
+            make.bottom.lessThanOrEqualToSuperview().offset(-10)
+        })
+        title.snp.makeConstraints({ make in
+            make.top.equalTo(avatar.snp.top)
+            make.left.equalTo(avatar.snp.right).offset(10)
+            make.right.equalToSuperview().offset(-10)
+        })
+        descriptionText.snp.makeConstraints({ make in
+            make.top.equalTo(title.snp.bottom).offset(10)
+            make.left.equalTo(avatar.snp.right).offset(10)
+            make.right.equalToSuperview().offset(-10)
+            make.bottom.lessThanOrEqualToSuperview().offset(-10)
+        })
+    }
 }

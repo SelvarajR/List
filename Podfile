@@ -10,4 +10,5 @@ target 'Listview' do
   pod "ModelMapper"
   pod 'SnapKit'
   pod 'Kingfisher', '~> 7.0'
+  pod 'SwiftLint'
 end
